@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+{% load static %}
+<!-- saved from url=(0028)https://quotes.toscrape.com/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<title>Quotes to Scrape</title>
+    <link rel="stylesheet" href="{% static "css/index.min.css" %}" >
+    <link rel="stylesheet" href="{% static "css/index.css" %}" >
+</head>
+<body>
+    
+<div class="container">
+    <div class="row header-box">
+        <div class="col-md-8">
+            <h1>
+                <a href="{% url 'noteapp:main'  %}" style="text-decoration: none">Quotes to Scrape</a>
+                <h4>{% now "jS F Y H:i" %}</h4>
+            </h1>
+        </div>
+        <div class="col-md-4">
+            <p>
+                 
+                {% if user.is_authenticated %}
+                <li>
+                <a href="{% url 'noteapp:author' %}" role="button"> Add Author </a>
+                <a href="{% url 'noteapp:note' %}" role="button"> Add note </a>
+                <a href="{% url 'noteapp:tag' %}" role="button"> Add Tag </a>
+                
+                <a href="{% url 'users:logout' %}" role="button"> Logout </a> 
+                <a href="{% url 'users:profile' %}" role="button"> Profile </a>
+                </li>
+                
+                 
+                <li>Welcome <b>{{ user.username }}!</b></li>
+                {% else %}         
+                <a href="{% url 'users:login' %}" role="button">Login</a>
+                <a href="{% url 'users:signup' %}" role="button">Signup</a>
+                {% endif %}
+            </p>
+        </div>
+        
+    </div>
+    
+
+    <div class="row">
+        <div class="col-md-8">
+            {% for note in page_obj %}
+                {% if not note.done %}
+                
+                <div class="quote" itemscope="" itemtype="http://schema.org/CreativeWork">
+                    <span class="text" itemprop="text">
+                        {{note.description}}
+                    </span>
+                   
+                    {% load extract_authors %}
+
+                    <span>by <small class="author" itemprop="author">{{note.author}} </small>
+                       
+                        <a href="{% url 'noteapp:detail' note.author.id  %}"> (about)</a>
+                        
+                       
+                    </span>
+                    
+                    <div class="tags">
+                        Tags:
+                        {% load extract_tags %}
+                        
+                            {% for tag_ in note.tags|tags%}
+                               
+                               <a class="tag" href="{% url 'noteapp:main'  %}">{{ tag_ }} </a>
+                             
+                            {% endfor %}
+                        
+                    </div>    
+                </div>
+                {% else %}
+                <a href="{% url 'noteapp:detail' note.id %}" role="button" class="secondary"><s>{{ note.name }}</s></a>
+                {% endif %}
+            {% endfor %}
+            
+                <nav>
+                    <ul class="pager">
+                        {% if page_obj.has_previous %}
+                        <li class="previous">                         
+                            <a href="?page={{ page_obj.previous_page_number }}"><span aria-hidden="true">←</span> Previous</a>
+                        </li>
+                        {% endif %}
+                        {% if page_obj.has_next %}           
+                        <li class="next">
+                            <a href="?page={{ page_obj.next_page_number }}">Next <span aria-hidden="true">→</span></a>
+                        </li>
+                        {% endif %}
+                        {% if page_obj.has_other_pages %}
+                        
+                                {% for p in page_obj.paginator.page_range %}
+                                <li>
+                                    <a href="?page={{ p }}">{{ p }}</a>
+                                    
+                                </li>
+                                {% endfor %}
+                          
+                        {% endif %} 
+                      
+                        
+                    </ul>
+                </nav>
+                
+            
+        </div>
+        <div class="col-md-4 tags-box">
+            
+                <h2>Top Ten tags</h2>
+                
+                
+                {% for tag_2 in tags%}
+                                    <span class="tag-item">
+                    <a class="tag" style="font-size: 28px" href=> {{tag_2}}</a>
+                    </span>
+                {% endfor %}
+
+             <!--  <span class="tag-item">
+                <a class="tag" style="font-size: 28px" href="https://quotes.toscrape.com/tag/love/">love</a>
+                </span>
+                
+                <span class="tag-item">
+                <a class="tag" style="font-size: 26px" href="https://quotes.toscrape.com/tag/inspirational/">inspirational</a>
+                </span>
+                
+                <span class="tag-item">
+                <a class="tag" style="font-size: 26px" href="https://quotes.toscrape.com/tag/life/">life</a>
+                </span>
+                
+                <span class="tag-item">
+                <a class="tag" style="font-size: 24px" href="https://quotes.toscrape.com/tag/humor/">humor</a>
+                </span>
+                
+                <span class="tag-item">
+                <a class="tag" style="font-size: 22px" href="https://quotes.toscrape.com/tag/books/">books</a>
+                </span>
+                
+                <span class="tag-item">
+                <a class="tag" style="font-size: 14px" href="https://quotes.toscrape.com/tag/reading/">reading</a>
+                </span>
+                
+                <span class="tag-item">
+                <a class="tag" style="font-size: 10px" href="https://quotes.toscrape.com/tag/friendship/">friendship</a>
+                </span>
+                
+                <span class="tag-item">
+                <a class="tag" style="font-size: 8px" href="https://quotes.toscrape.com/tag/friends/">friends</a>
+                </span>
+                
+                <span class="tag-item">
+                <a class="tag" style="font-size: 8px" href="https://quotes.toscrape.com/tag/truth/">truth</a>
+                </span>
+                
+                <span class="tag-item">
+                <a class="tag" style="font-size: 6px" href="https://quotes.toscrape.com/tag/simile/">simile</a>
+                </span>
+                --> 
+            
+        </div>
+    </div>
+</div>
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">
+                Quotes by: <a href="https://www.goodreads.com/quotes">GoodReads.com</a>
+            </p>
+            <p class="copyright">
+                Made with <span class="zyte">❤</span> by <a class="zyte" href="https://www.zyte.com/">Zyte</a>
+            </p>
+        </div>
+    </footer>
+
+</body></html>

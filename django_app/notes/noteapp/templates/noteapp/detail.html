@@ -1,0 +1,17 @@
+{% extends "noteapp/base.html" %} {% load extract_authors %} {% block content %}
+
+
+<h1>{{author.fullname}}</h1>
+<p>Born date: <kbd>{{author.born_date}}</kbd></p>
+<p>Description: <b>{{author.description}}</b></p>
+<p>Born location: <kbd>{{author.born_location}}</kbd></p>
+{% if note.done %}
+<p>
+  Status:
+  <ins>Completed</ins>
+</p>
+{% else %}
+<p>Status: <i>Not implemented</i></p>
+{% endif %}
+
+{% endblock %}

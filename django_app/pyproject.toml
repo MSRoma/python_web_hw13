@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "django-app"
+version = "0.1.0"
+description = ""
+authors = ["Roman <Tesmail@i.ua>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django-environ = "^0.11.2"
+pillow = "^10.1.0"
+psycopg2 = "^2.9.9"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
